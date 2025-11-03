@@ -54,8 +54,7 @@ if prompt := st.chat_input("Digite sua mensagem..."):
                 
                 if response.status_code == 200:
                     result = response.json()
-                    st.write("Debug - Resposta completa:", result)
-                    bot_response = result.get("FinalResult", {}).get("Result", {}).get("question", "Resposta não encontrada")
+                    bot_response = result.get("output", {}).get("question", "Resposta não encontrada")
                     st.markdown(bot_response)
                     st.session_state.messages.append({"role": "assistant", "content": bot_response})
                 else:
