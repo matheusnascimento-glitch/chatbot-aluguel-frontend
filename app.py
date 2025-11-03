@@ -75,3 +75,10 @@ with st.sidebar:
     st.markdown("---")
     st.markdown("### Sobre")
     st.markdown("Este é um frontend de teste para o chatbot de aluguel de carros hospedado na AWS.")
+
+with st.sidebar:
+    st.header("Copiar JSON")
+    retirada_data = json.dumps({"tipo_retirada": "bairro", "ref_retirada": "reboucas", "cid_retirada": 6015}, indent=4)
+    devolucao_data = json.dumps({"tipo_devolucao": "aeroporto", "ref_devolucao": 9, "cid_devolucao": 8452}, indent=4)
+    st.text_area("Retirada:", retirada_data, height=100)
+    st.text_area("Devolução:", devolucao_data, height=100)
