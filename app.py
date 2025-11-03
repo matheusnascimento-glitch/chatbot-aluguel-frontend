@@ -54,9 +54,27 @@ if prompt := st.chat_input("Digite sua mensagem..."):
                 
                 if response.status_code == 200:
                     result = response.json()
-                    bot_response = result.get("output", {}).get("question", "Resposta não encontrada")
-                    st.markdown(bot_response)
-                    st.session_state.messages.append({"role": "assistant", "content": bot_response})
+                    
+                    # Verifica se há erro na execução da Step Function
+                    if result.get("status") == "FAILED":
+                        error_cause = result.get("cause", "Erro desconhecido")
+                        error_msg = f"❌ Erro na Step Function: {error_cause}"
+                        st.error(error_msg)
+                        st.session_state.messages.append({"role": "assistant", "content": error_msg})
+                    else:
+                        # Tenta extrair a resposta do chatbot
+                        bot_response = result.get("output", {}).get("question", "Resposta não encontrada")
+                        
+                        # Se não encontrou na estrutura padrão, tenta outras possibilidades
+                        if bot_response == "Resposta não encontrada":
+                            # Verifica se há filtro de erro
+                            if "filter" in str(result) and "ERRO_PARAMETROS" in str(result):
+                                bot_response = "❌ Erro nos parâmetros fornecidos. Verifique se a data está no formato correto (DD/MM/AAAA)."
+                            else:
+                                bot_response = f"Resposta: {json.dumps(result, indent=2, ensure_ascii=False)}"
+                        
+                        st.markdown(bot_response)
+                        st.session_state.messages.append({"role": "assistant", "content": bot_response})
                 else:
                     error_msg = f"Erro {response.status_code}: {response.text}"
                     st.error(error_msg)
@@ -78,7 +96,13 @@ with st.sidebar:
 
 with st.sidebar:
     st.header("Copiar JSON")
-    retirada_data = json.dumps({"tipo_retirada": "bairro", "ref_retirada": "reboucas", "cid_retirada": 6015}, indent=4)
-    devolucao_data = json.dumps({"tipo_devolucao": "aeroporto", "ref_devolucao": 9, "cid_devolucao": 8452}, indent=4)
-    st.text_area("Retirada:", retirada_data, height=100)
-    st.text_area("Devolução:", devolucao_data, height=100)
+    retirada_data = json.dumps({"tipo_retirada": "bairro", "ref_retirada": "reboucas", "cid_retirada": 6015})
+    devolucao_data = json.dumps({"tipo_devolucao": "aeroporto", "ref_devolucao": 9, "cid_devolucao": 8452})
+
+    if st.button("Copiar LOCAL_RETIRADA"):
+        st.session_state["copied_json"] = retirada_data
+    if st.button("Copiar LOCAL_DEVOLUCAO"):
+        st.session_state["copied_json"] = devolucao_data
+
+    if "copied_json" in st.session_state:
+        st.code(st.session_state["copied_json"], language="json")
