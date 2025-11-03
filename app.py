@@ -42,7 +42,7 @@ if prompt := st.chat_input("Digite sua mensagem..."):
                 
                 payload = {
                     "CustomerId": customer_id,
-                    "Message": prompt
+                    "Question": prompt
                 }
                 
                 response = requests.post(
