@@ -93,10 +93,10 @@ with st.sidebar:
     st.markdown("---")
     st.header("Locais para Copiar e Colar")
     
-    st.subheader("Local Retirada (copiar e colar quando for solicitado)")
+    st.subheader("Local Retirada (dados mockados - copiar e colar)")
     retirada_data = json.dumps({"tipo_retirada": "bairro", "ref_retirada": "reboucas", "cid_retirada": 6015})
     st.code(retirada_data, language="json")
     
-    st.subheader("Local Devolução (copiar e colar quando for solicitado)")
+    st.subheader("Local Devolução (dados mockados - copiar e colar)")
     devolucao_data = json.dumps({"tipo_devolucao": "aeroporto", "ref_devolucao": 9, "cid_devolucao": 8452})
     st.code(devolucao_data, language="json")
