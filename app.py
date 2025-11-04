@@ -3,12 +3,12 @@ import requests
 import json
 
 st.set_page_config(
-    page_title="Chatbot Aluguel de Carros",
+    page_title="Chatbot CarroAluguel V1",
     page_icon="🚗",
     layout="wide"
 )
 
-st.title("🚗 Chatbot Aluguel de Carros")
+st.title("🚗 Chatbot CarroAluguel V1")
 
 with st.sidebar:
     st.header("Configuração")
@@ -91,18 +91,12 @@ if st.sidebar.button("Limpar Chat"):
 
 with st.sidebar:
     st.markdown("---")
-    st.markdown("### Sobre")
-    st.markdown("Este é um frontend de teste para o chatbot de aluguel de carros hospedado na AWS.")
-
-with st.sidebar:
-    st.header("Copiar JSON")
+    st.header("Locais para Copiar e Colar")
+    
+    st.subheader("Local Retirada (copiar e colar quando for solicitado)")
     retirada_data = json.dumps({"tipo_retirada": "bairro", "ref_retirada": "reboucas", "cid_retirada": 6015})
+    st.code(retirada_data, language="json")
+    
+    st.subheader("Local Devolução (copiar e colar quando for solicitado)")
     devolucao_data = json.dumps({"tipo_devolucao": "aeroporto", "ref_devolucao": 9, "cid_devolucao": 8452})
-
-    if st.button("Copiar LOCAL_RETIRADA"):
-        st.session_state["copied_json"] = retirada_data
-    if st.button("Copiar LOCAL_DEVOLUCAO"):
-        st.session_state["copied_json"] = devolucao_data
-
-    if "copied_json" in st.session_state:
-        st.code(st.session_state["copied_json"], language="json")
+    st.code(devolucao_data, language="json")
